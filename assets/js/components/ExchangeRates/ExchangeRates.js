@@ -250,7 +250,15 @@ export default class ExchangeRates extends Component {
 
         let resultDate = regex.exec(querySearch)
 
+        if (! resultDate) {
+            this.setBrowserUrlDateQueryParam(null);
+
+            return;
+        }
+
         if (typeof resultDate[1] === 'undefined') {
+            this.setBrowserUrlDateQueryParam(null);
+
             return;
         }
 
