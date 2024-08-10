@@ -4,27 +4,41 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+  nbp:
+    exchangeRates:
+      supportedCurrencies: '%env(csv:NBP_SUPPORTED_CURRENCIES)%'
+      buyableCurrencies: '%env(csv:NBP_BUYABLE_CURRENCIES)%'
+      fromDate: '%env(string:NBP_DATA_FROM_DATE)%'
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/App'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
+  # makes classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/App'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/App/Controller/'
-        autowire: true
-        tags: ['controller.service_arguments']
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: '../src/App/Controller/'
+    autowire: true
+    tags: [ 'controller.service_arguments' ]
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
+
+  _instanceof:
+    App\Service\NBP\ExchangeRate\DTO\Factories\FactoryInterface:
+      tags: [ 'app.nbp.exchangeRate.dto.factories' ]
+
+  App\Service\NBP\ExchangeRate\DTO\FactoryService:
+    arguments:
+      - '@parameter_bag'
+      - !tagged_iterator app.nbp.exchangeRate.dto.factories

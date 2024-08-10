@@ -1,0 +1,19 @@
+[
+  {
+    "table": "A",
+    "no": "153/A/NBP/2024",
+    "effectiveDate": "2024-08-07",
+    "rates": [
+      {
+        "currency": "bat (Tajlandia)",
+        "code": "THB",
+        "mid": 0.1109
+      },
+      {
+        "currency": "dolar amerykański",
+        "code": "USD",
+        "mid": 3.9526
+      }
+    ]
+  }
+]
